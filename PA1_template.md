@@ -153,7 +153,8 @@
   names(imputedDataAverage)[3] <- 'steps'
 
   xyplot(steps~interval | dayOfWeek, imputedDataAverage, type="l",
-       layout=c(1,2), xlab="5 Minute Interval", ylab = "Average Number of Steps Taken")
+       layout=c(1,2), xlab="5 Minute Interval", ylab = "Average Number of Steps Taken",
+       main="Average Number of Steps Taken, \nAveraged across all Days over 5 Minute Intervals By Weekday/Weekend")
 ```
 
 ![plot of chunk panelPlot](figure/panelPlot.png) 
