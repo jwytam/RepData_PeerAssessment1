@@ -2,10 +2,7 @@
 
 13/06/2014
 
-```{r setup, echo=FALSE}
-  options(scipen = 1, digits = 2)
-  library(lattice)
-```
+
 
 ## Loading and preprocessing the data
 
@@ -14,7 +11,8 @@
   Reads the 'activity.csv' file from the working directory. 
   Note: This step assumes that the file has been unzipped in the current working directory.
 
-```{r loadData, echo=TRUE}
+
+```r
   allData <- read.csv("activity.csv", colClasses = c("numeric", "Date", "numeric"))
 ```
 
@@ -22,13 +20,15 @@
 
   The processed data removes the dates that have 'NA' values as defined by the assignment brief. E.g. '2012-10-01' contained all NA step values and has been removed.
 
-```{r omitData, echo=TRUE}
+
+```r
   data <- na.omit(allData)
 ```
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Creates data frames that stores the total number of steps grouped by date and the average number of steps taken per interval. These data frames will be used to answer the following questions.    
 
-```{r processData, echo=TRUE}
+
+```r
   dataSteps <- aggregate(data$steps, by=list(data$date), sum, na.rm=TRUE)
   names(dataSteps)[1] <- 'date'
   names(dataSteps)[2] <- 'steps'
@@ -41,44 +41,54 @@
 ## What is mean total number of steps taken per day?
 
 - Make a histogram of the total number of steps taken each day
-```{r plotTotalStepsPerDay, echo=TRUE}
+
+```r
   hist(dataSteps$steps, col="blue", main="Total Number of Steps Taken Per Day", xlab="Steps Taken Per Day")
 ```
 
+![plot of chunk plotTotalStepsPerDay](figure/plotTotalStepsPerDay.png) 
+
 - Calculate and report the mean and median total number of steps taken per day
-```{r meanSteps, echo=TRUE}
+
+```r
   mean <- mean(dataSteps$steps, na.rm=TRUE)
   median <- median(dataSteps$steps, na.rm=TRUE)
 ```
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The mean number of steps taken per day is **`r mean`**. The median number of steps taken per day is **`r median`**.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The mean number of steps taken per day is **10766.19**. The median number of steps taken per day is **10765**.
 
 ## What is the average daily activity pattern?
 
 - Time series plot of the 5-minute interval and the average number of steps taken, averaged across all days 
-```{r timeSeriesAverageSteps, echo=TRUE}
+
+```r
   plot(dataAverage$interval, dataAverage$steps, type="l", col="purple",
     main="Average Number of Steps Taken, \nAveraged across all Days over 5 Minute Intervals",
     xlab = "5 Minute Interval", ylab = "Average Number of Steps Taken")  
 ```
 
+![plot of chunk timeSeriesAverageSteps](figure/timeSeriesAverageSteps.png) 
+
 - Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
-```{r maxSteps, echo=TRUE}
+
+```r
   maxStepInterval <- dataAverage[head(order(-dataAverage$steps), 1), ]$interval
 ```
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The 5-minute interval, that on average across all days has the maximum number of steps is **`r maxStepInterval`**.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The 5-minute interval, that on average across all days has the maximum number of steps is **835**.
 
 ## Imputing missing values
 
 - Calculate and report the total number of missing values in the dataset (i.e. the total number of rows with NAs)
-```{r missing, echo=TRUE}
+
+```r
   missing <- nrow(allData[allData$steps=="NA", ])
 ```
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The number of missing values in the dataset is **`r missing`**.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The number of missing values in the dataset is **2304**.
 
 - Replace the missing step values in the dataset with the mean steps per interval over every day.
-```{r replaceMissing, echo=TRUE}
+
+```r
   imputedData <- allData
   for(n in 1 : nrow(imputedData)) 
   {
@@ -92,21 +102,24 @@
   imputedDataSteps <- aggregate(imputedData$steps, by=list(imputedData$date), sum, na.rm=TRUE)
   names(imputedDataSteps)[1] <- 'date'
   names(imputedDataSteps)[2] <- 'steps'
-
 ```
 
 - Make a histogram of the total number of steps taken each day
-```{r plotImputedTotalStepsPerDay, echo=TRUE}
+
+```r
   hist(imputedDataSteps$steps, col="orange", main="Total Number of Steps Taken Per Day", xlab="Steps Taken Per Day")
 ```
 
+![plot of chunk plotImputedTotalStepsPerDay](figure/plotImputedTotalStepsPerDay.png) 
+
 - Calculate and report the mean and median total number of steps taken per day
-```{r newMeanSteps, echo=TRUE}
+
+```r
   imputedMean <- mean(imputedDataSteps$steps, na.rm=TRUE)
   imputedMedian <- median(imputedDataSteps$steps, na.rm=TRUE)
 ```
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The mean number of steps taken per day is **`r imputedMean`**. The median number of steps taken per day is **`r imputedMedian`**.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The mean number of steps taken per day is **10766.19**. The median number of steps taken per day is **10766.19**.
 
 
 ## Are there differences in activity patterns between weekdays and weekends?
@@ -115,7 +128,8 @@
 
   The new factor created is called dayOfWeek.
   
-```{r activityPattern, echo=TRUE}
+
+```r
   imputedData$dayOfWeek <- ""
 
   for(n in 1 : nrow(imputedData))
@@ -127,12 +141,12 @@
       imputedData[n, 4]  <-  "Weekday"
     }
   }
-  
 ```
 
 - Make a panel plot containing a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis). 
 
-```{r panelPlot, echo=TRUE}
+
+```r
   imputedDataAverage <- aggregate(imputedData$steps, by=list(imputedData$interval, imputedData$dayOfWeek), mean, na.rm=TRUE)
   names(imputedDataAverage)[1] <- 'interval'
   names(imputedDataAverage)[2] <- 'dayOfWeek'
@@ -140,6 +154,7 @@
 
   xyplot(steps~interval | dayOfWeek, imputedDataAverage, type="l",
        layout=c(1,2), xlab="5 Minute Interval", ylab = "Average Number of Steps Taken")
-
 ```
+
+![plot of chunk panelPlot](figure/panelPlot.png) 
 
