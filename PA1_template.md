@@ -158,3 +158,4 @@
 
 ![plot of chunk panelPlot](figure/panelPlot.png) 
 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;There appears to be a peak in the average number of steps during the weekday, compared to that of the number of steps taken during the weekends, where the data is flatter.
