@@ -2,6 +2,8 @@
 
 13/06/2014
 
+Please note that all mean/median values are rounded to the nearest digit.
+
 
 
 ## Loading and preprocessing the data
@@ -25,7 +27,7 @@
   data <- na.omit(allData)
 ```
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Creates data frames that stores the total number of steps grouped by date and the average number of steps taken per interval. These data frames will be used to answer the following questions.    
+Creates data frames that stores the total number of steps grouped by date and the average number of steps taken per interval. These data frames will be used to answer the following questions.    
 
 
 ```r
@@ -53,9 +55,23 @@
 ```r
   mean <- mean(dataSteps$steps, na.rm=TRUE)
   median <- median(dataSteps$steps, na.rm=TRUE)
+
+  mean
 ```
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The mean number of steps taken per day is **10766.19**. The median number of steps taken per day is **10765**.
+```
+## [1] 10766
+```
+
+```r
+  median
+```
+
+```
+## [1] 10765
+```
+
+The mean number of steps taken per day is **10766**. The median number of steps taken per day is **10765**.
 
 ## What is the average daily activity pattern?
 
@@ -73,8 +89,14 @@
 
 ```r
   maxStepInterval <- dataAverage[head(order(-dataAverage$steps), 1), ]$interval
+
+  maxStepInterval
 ```
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The 5-minute interval, that on average across all days has the maximum number of steps is **835**.
+
+```
+## [1] 835
+```
+The 5-minute interval, that on average across all days has the maximum number of steps is **835**.
 
 ## Imputing missing values
 
@@ -82,11 +104,17 @@
 
 ```r
   missing <- nrow(allData[allData$steps=="NA", ])
+
+  missing
 ```
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The number of missing values in the dataset is **2304**.
+```
+## [1] 2304
+```
 
-- Replace the missing step values in the dataset with the mean steps per interval over every day.
+The number of missing values in the dataset is **2304**.
+
+- Replace the missing step values in the dataset. This is achieved by replacing the missing values with the mean steps per interval over every day.
 
 ```r
   imputedData <- allData
@@ -104,7 +132,7 @@
   names(imputedDataSteps)[2] <- 'steps'
 ```
 
-- Make a histogram of the total number of steps taken each day
+- Make a histogram of the total number of steps taken each day (with imputed data)
 
 ```r
   hist(imputedDataSteps$steps, col="orange", main="Total Number of Steps Taken Per Day", xlab="Steps Taken Per Day")
@@ -112,14 +140,14 @@
 
 ![plot of chunk plotImputedTotalStepsPerDay](figure/plotImputedTotalStepsPerDay.png) 
 
-- Calculate and report the mean and median total number of steps taken per day
+- Calculate and report the mean and median total number of steps taken per day (with imputed data)
 
 ```r
   imputedMean <- mean(imputedDataSteps$steps, na.rm=TRUE)
   imputedMedian <- median(imputedDataSteps$steps, na.rm=TRUE)
 ```
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The mean number of steps taken per day is **10766.19**. The median number of steps taken per day is **10766.19**.
+Using the imputed data, the mean number of steps taken per day is **10766**, and the median number of steps taken per day is **10766**.
 
 
 ## Are there differences in activity patterns between weekdays and weekends?
@@ -143,7 +171,7 @@
   }
 ```
 
-- Make a panel plot containing a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis). 
+- Make a panel plot containing a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekdays or weekends (y-axis). 
 
 
 ```r
@@ -159,4 +187,4 @@
 
 ![plot of chunk panelPlot](figure/panelPlot.png) 
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;There appears to be a peak in the average number of steps during the weekday, compared to that of the number of steps taken during the weekends, where the data is flatter.
+There appears to be a peak in the average number of steps during the weekday, compared to that of the number of steps taken during the weekends, where the data is flatter.
